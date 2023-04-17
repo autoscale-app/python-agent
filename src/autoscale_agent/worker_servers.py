@@ -1,21 +1,12 @@
 class WorkerServers:
     def __init__(self):
-        self.servers = []
-
-    def __iter__(self):
-        return iter(self.servers)
-
-    def __len__(self):
-        return len(self.servers)
-
-    def __getitem__(self, index):
-        return self.servers[index]
+        self._servers = []
 
     def append(self, server):
-        self.servers.append(server)
+        self._servers.append(server)
 
     def find(self, tokens):
-        for server in self.servers:
+        for server in self._servers:
             if server.token in tokens:
                 return server
         return None

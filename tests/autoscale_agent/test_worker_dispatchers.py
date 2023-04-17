@@ -10,7 +10,7 @@ def test_dispatch(mocker):
     dispatchers.append(dispatcher)
     mocker.patch.object(dispatcher, 'dispatch')
     dispatchers.dispatch()
-    for dispatcher in dispatchers:
+    for dispatcher in dispatchers._dispatchers:
         assert dispatcher.dispatch.called
 
 def test_dispatch_exception(mocker, capsys):
@@ -20,4 +20,4 @@ def test_dispatch_exception(mocker, capsys):
     mocker.patch.object(dispatcher, 'dispatch', side_effect=RuntimeError)
     dispatchers.dispatch()
     out, _ = capsys.readouterr()
-    assert "Autoscale::Agent/WorkerDispatcher: RuntimeError" in out
+    assert "Autoscale: RuntimeError" in out

@@ -1,7 +1,7 @@
 class WorkerServer:
-    def __init__(self, token, block):
+    def __init__(self, token, callable):
         self.token = token
-        self.block = block
+        self._callable = callable
 
     def serve(self):
-        return self.block()
+        return self._callable()

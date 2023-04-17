@@ -1,7 +1,6 @@
 import pytest
 import time
 from freezegun import freeze_time
-import tests.helpers as helpers
 from tests.helpers import TOKEN
 from autoscale_agent.middleware import Middleware, RequestInfo
 from autoscale_agent.configuration import Configuration
@@ -10,8 +9,8 @@ from autoscale_agent.configuration import Configuration
 def build_config():
     return Configuration("render")
 
-def call(config, path="",headers={}):
-    return Middleware(config, run=False).process_request(RequestInfo(path, headers))
+def call(config, path="", headers={}):
+    return Middleware(config).process_request(RequestInfo(path, headers))
 
 def test_call_default():
     assert None == call(build_config())
@@ -32,11 +31,11 @@ def test_call_serve_404():
 
 def test_call_record_queue_time_on_render():
     config = build_config().dispatch(TOKEN)
-    for travel, request_start in [[0, 500_000], [0, 1_000_000], [1, 1_500_000]]:
-        with helpers.travel(travel):
+    for second, request_start in [[0, 500_000], [0, 1_000_000], [1, 1_500_000]]:
+        with freeze_time(f'2000-01-01 00:00:0{second}'):
             current_time = int(time.time() * 1_000_000)
             response = call(config, "/", {"HTTP_X_REQUEST_START": (current_time - request_start)})
             assert None == response
 
-    buffer = config.web_dispatchers.queue_time.buffer
+    buffer = config.web_dispatchers.queue_time._buffer
     assert {946684800: 1000, 946684801: 1500} == buffer

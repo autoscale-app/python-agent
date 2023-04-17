@@ -8,30 +8,21 @@ class WorkerDispatchers:
     def __init__(self):
         self._dispatchers = []
 
-    def __iter__(self):
-        return iter(self._dispatchers)
-
-    def __len__(self):
-        return len(self._dispatchers)
-
-    def __getitem__(self, index):
-        return self._dispatchers[index]
-
     def append(self, dispatcher):
         self._dispatchers.append(dispatcher)
 
     def dispatch(self):
-        for dispatcher in self:
+        for dispatcher in self._dispatchers:
             try:
                 dispatcher.dispatch()
             except Exception as e:
-                print(f"Autoscale::Agent/WorkerDispatcher: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}")
+                print(f"Autoscale: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}")
 
     def run(self):
-        def _run():
-            while True:
-                self.dispatch()
-                time.sleep(self.DISPATCH_INTERVAL)
-
-        thread = threading.Thread(target=_run, daemon=True)
+        thread = threading.Thread(target=self.run_loop, daemon=True)
         thread.start()
+
+    def run_loop():
+        while True:
+            self.dispatch()
+            time.sleep(self.DISPATCH_INTERVAL)

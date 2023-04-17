@@ -8,7 +8,7 @@ from tests.helpers import PLATFORM, TOKEN
 
 def test_platform():
     for p in ["render"]:
-        config = Configuration(p, run=False)
+        config = Configuration(p)
         assert config.platform == p
 
 def test_platform_invalid():
@@ -16,19 +16,15 @@ def test_platform_invalid():
         Configuration("whoami")
 
 def test_dispatch_web():
-    config = Configuration(PLATFORM, run=False).dispatch(TOKEN)
-    dispatcher = config.web_dispatchers.queue_time
-    assert isinstance(dispatcher, WebDispatcher)
-    assert len(config.web_dispatchers) == 1
+    config = Configuration(PLATFORM).dispatch(TOKEN)
+    assert isinstance(config.web_dispatchers.queue_time, WebDispatcher)
 
 def test_dispatch_worker():
-    config = Configuration(PLATFORM, run=False).dispatch(TOKEN, lambda: 1.23)
-    dispatcher = config.worker_dispatchers[0]
-    assert isinstance(dispatcher, WorkerDispatcher)
-    assert len(config.worker_dispatchers) == 1
+    config = Configuration(PLATFORM).dispatch(TOKEN, lambda: 1.23)
+    assert isinstance(config.worker_dispatchers._dispatchers[0], WorkerDispatcher)
+    assert len(config.worker_dispatchers._dispatchers) == 1
 
 def test_serve_worker():
-    config = Configuration(PLATFORM, run=False).serve(TOKEN, lambda: 1.23)
-    server = config.worker_servers[0]
-    assert isinstance(server, WorkerServer)
-    assert len(config.worker_servers) == 1
+    config = Configuration(PLATFORM).serve(TOKEN, lambda: 1.23)
+    assert isinstance(config.worker_servers._servers[0], WorkerServer)
+    assert len(config.worker_servers._servers) == 1

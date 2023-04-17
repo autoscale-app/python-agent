@@ -22,24 +22,18 @@ def test_dispatch():
         "https://metrics.autoscale.app/",
         status=200, body="", headers={}
     )
-
     dispatcher = WebDispatcher(TOKEN)
     metrics = [[1], [0, 2, 1], [2, 1, 3], [1, 4, 3], [5, 4, 1], [6, 2, 6], [0, 3, 7]]
-
     for i in range(len(metrics)):
         with freeze_time(f"2000-01-01 00:00:{i+1}"):
             for metric in metrics[i]:
                 dispatcher.add(metric)
-
     with freeze_time("2000-01-01 00:00:07"):
         dispatcher.dispatch()
-
     request = httpretty.last_request()
-
     assert request.headers.get("Content-Type") == "application/json"
     assert request.headers.get("User-Agent") == "Autoscale Agent (Python)"
     assert request.headers.get("Autoscale-Metric-Token") == TOKEN
-
     actual_body = json.loads(request.body.decode('utf-8'))
     expected_body = {
         "946684801": 1,
@@ -50,7 +44,6 @@ def test_dispatch():
         "946684806": 6,
         "946684807": 7
     }
-
     assert actual_body == expected_body
     assert dispatcher._buffer == {}
 
@@ -64,31 +57,23 @@ def test_dispatch_empty(mock_dispatch):
 def test_dispatch_500(capsys):
     dispatcher = WebDispatcher(TOKEN)
     metrics = [[1], [0, 2, 1], [2, 1, 3], [1, 4, 3], [5, 4, 1], [6, 2, 6], [0, 3, 7]]
-
     for i in range(len(metrics)):
         with freeze_time(f"2000-01-01 00:00:{i+1}"):
             for metric in metrics[i]:
                 dispatcher.add(metric)
-
     buffer = dispatcher._buffer.copy()
-
     httpretty.register_uri(
         httpretty.POST,
         "https://metrics.autoscale.app/",
         status=500, body="", headers={}
     )
-
     with freeze_time("2000-01-01 00:00:07"):
       dispatcher.dispatch()
-
     assert buffer == dispatcher._buffer
-
     request = httpretty.last_request()
-
     assert request.headers.get("Content-Type") == "application/json"
     assert request.headers.get("User-Agent") == "Autoscale Agent (Python)"
     assert request.headers.get("Autoscale-Metric-Token") == TOKEN
-
     actual_body = json.loads(request.body.decode('utf-8'))
     expected_body = {
         "946684801": 1,
@@ -99,10 +84,7 @@ def test_dispatch_500(capsys):
         "946684806": 6,
         "946684807": 7
     }
-
     assert actual_body == expected_body
-
     out, _ = capsys.readouterr()
-
     assert "Autoscale[u4quBFg]: Failed to dispatch data (500)" in out
     assert buffer == dispatcher._buffer
