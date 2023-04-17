@@ -2,6 +2,7 @@ import time
 import threading
 import os
 import json
+import http.client
 from . import request
 
 
@@ -23,7 +24,7 @@ class WebDispatcher:
         body = json.dumps(payload)
         response = request.dispatch(body, self.token)
 
-        if not response.status == 200:
+        if not response.status == http.client.OK:
             print(f'Autoscale[{self.id}]: Failed to dispatch data ({response.status})')
             self.revert(payload)
 

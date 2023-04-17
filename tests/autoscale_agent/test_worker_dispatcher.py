@@ -5,14 +5,21 @@ from autoscale_agent.worker_dispatcher import WorkerDispatcher
 from tests.helpers import TOKEN
 
 
+def test_token():
+    dispatcher = WorkerDispatcher(TOKEN, lambda: 1.23)
+    assert dispatcher.token == TOKEN
+
 def test_id():
     dispatcher = WorkerDispatcher(TOKEN, lambda: 1.23)
     assert dispatcher.id == 'u4quBFg'
 
-@httpretty.activate
+@httpretty.activate(verbose=True, allow_net_connect=False)
 def test_dispatch():
-    httpretty.register_uri(httpretty.POST, "https://metrics.autoscale.app/",
-        status=200, body="", headers={})
+    httpretty.register_uri(
+        httpretty.POST,
+        "https://metrics.autoscale.app/",
+        status=200, body="", headers={}
+    )
     dispatcher = WorkerDispatcher(TOKEN, lambda: 1.23)
     dispatcher.dispatch()
     last_request = httpretty.last_request()
@@ -23,10 +30,13 @@ def test_dispatch():
     assert last_request.headers['Content-Type'] == 'application/json'
     assert last_request.headers['User-Agent'] == 'Autoscale Agent (Python)'
 
-@httpretty.activate
+@httpretty.activate(verbose=True, allow_net_connect=False)
 def test_dispatch_500(capsys):
-    httpretty.register_uri(httpretty.POST, "https://metrics.autoscale.app/",
-        status=500, body="", headers={})
+    httpretty.register_uri(
+        httpretty.POST,
+        "https://metrics.autoscale.app/",
+        status=500, body="", headers={}
+    )
     dispatcher = WorkerDispatcher(TOKEN, lambda: 1.23)
     out, _ = capsys.readouterr()
     dispatcher.dispatch()
@@ -38,11 +48,11 @@ def test_dispatch_500(capsys):
     assert last_request.headers['Content-Type'] == 'application/json'
     assert last_request.headers['User-Agent'] == 'Autoscale Agent (Python)'
     out, _ = capsys.readouterr()
-    assert "Autoscale::Agent/WorkerDispatcher[u4quBFg][ERROR]: Failed to dispatch (500) " in out
+    assert "Autoscale[u4quBFg][ERROR]: Failed to dispatch (500) " in out
 
 def test_dispatch_nil_value(capsys):
     dispatcher = WorkerDispatcher(TOKEN, lambda: None)
     out, _ = capsys.readouterr()
     dispatcher.dispatch()
     out, _ = capsys.readouterr()
-    assert "Autoscale::Agent/WorkerDispatcher[u4quBFg][ERROR]: Failed to calculate worker information (None)" in out
+    assert "Autoscale[u4quBFg][ERROR]: Failed to calculate worker information (None)" in out
