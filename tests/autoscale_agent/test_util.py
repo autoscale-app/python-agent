@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import patch, MagicMock
-import autoscale_agent.request as request
+from autoscale_agent.util import dispatch
 
 
 @patch("http.client.HTTPSConnection")
@@ -11,7 +11,7 @@ def test_dispatch(mock_conn):
     mock_response = MagicMock()
     mock_response.status = 200
     mock_conn.return_value.getresponse.return_value = mock_response
-    response = request.dispatch(body, token)
+    response = dispatch(body, token)
     mock_conn.return_value.request.assert_called_once_with(
         "POST",
         "/",

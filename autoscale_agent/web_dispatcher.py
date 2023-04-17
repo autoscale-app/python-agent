@@ -3,7 +3,7 @@ import threading
 import os
 import json
 import http.client
-from . import request
+from autoscale_agent.util import dispatch
 
 
 class WebDispatcher:
@@ -22,7 +22,7 @@ class WebDispatcher:
             return
 
         body = json.dumps(payload)
-        response = request.dispatch(body, self.token)
+        response = dispatch(body, self.token)
 
         if not response.status == http.client.OK:
             print(f"Autoscale[{self.id}]: Failed to dispatch data ({response.status})")

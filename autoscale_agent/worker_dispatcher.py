@@ -1,7 +1,7 @@
 import json
 import time
 import http.client
-import autoscale_agent.request as request
+from autoscale_agent.util import dispatch
 
 
 class WorkerDispatcher:
@@ -18,7 +18,7 @@ class WorkerDispatcher:
             return
 
         body = json.dumps({int(time.time()): value})
-        response = request.dispatch(body=body, token=self.token)
+        response = dispatch(body=body, token=self.token)
 
         if not response.status == http.client.OK:
             self.error(

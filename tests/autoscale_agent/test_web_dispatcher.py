@@ -52,7 +52,7 @@ def test_dispatch():
     assert dispatcher._buffer == {}
 
 
-@patch("autoscale_agent.request.dispatch")
+@patch("autoscale_agent.util.dispatch")
 def test_dispatch_empty(mock_dispatch):
     dispatcher = WebDispatcher(TOKEN)
     dispatcher.dispatch()
