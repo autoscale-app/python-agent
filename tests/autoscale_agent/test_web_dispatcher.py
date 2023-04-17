@@ -3,7 +3,7 @@ import json
 import httpretty
 from unittest.mock import patch
 from freezegun import freeze_time
-from tests.helpers import travel, TOKEN
+from tests.helpers import TOKEN
 from autoscale_agent.web_dispatcher import WebDispatcher
 
 
@@ -66,7 +66,7 @@ def test_dispatch_500(capsys):
     metrics = [[1], [0, 2, 1], [2, 1, 3], [1, 4, 3], [5, 4, 1], [6, 2, 6], [0, 3, 7]]
 
     for i in range(len(metrics)):
-        with travel(i+1):
+        with freeze_time(f"2000-01-01 00:00:{i+1}"):
             for metric in metrics[i]:
                 dispatcher.add(metric)
 
@@ -78,7 +78,7 @@ def test_dispatch_500(capsys):
         status=500, body="", headers={}
     )
 
-    with travel(len(metrics)):
+    with freeze_time("2000-01-01 00:00:07"):
       dispatcher.dispatch()
 
     assert buffer == dispatcher._buffer

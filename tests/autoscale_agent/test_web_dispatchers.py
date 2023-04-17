@@ -7,26 +7,16 @@ from tests.helpers import TOKEN
 
 def test_already_set_error():
     dispatchers = WebDispatchers()
-    dispatchers.queue_time = WebDispatcher(TOKEN)
+    dispatchers.set_queue_time(WebDispatcher(TOKEN))
     with pytest.raises(AlreadySetError):
-        dispatchers.queue_time = WebDispatcher(TOKEN)
-
-
-def test_prune(mocker):
-    dispatchers = WebDispatchers()
-    dispatchers.queue_time = WebDispatcher(TOKEN)
-    mocker.patch.object(dispatchers.queue_time, 'prune')
-    dispatchers.prune()
-    dispatchers.queue_time.prune.assert_called_once()
-
+        dispatchers.set_queue_time(WebDispatcher(TOKEN))
 
 def test_dispatch(mocker):
     dispatchers = WebDispatchers()
-    dispatchers.queue_time = WebDispatcher(TOKEN)
+    dispatchers.set_queue_time(WebDispatcher(TOKEN))
     mocker.patch.object(dispatchers.queue_time, 'dispatch')
     dispatchers.dispatch()
     dispatchers.queue_time.dispatch.assert_called_once()
-
 
 def test_dispatch_exception(mocker, capsys):
     dispatchers = WebDispatchers()
