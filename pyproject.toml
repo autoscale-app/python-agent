@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "autoscale_agent"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.7, <3.12"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
