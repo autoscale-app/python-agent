@@ -7,7 +7,7 @@ from tests.helpers import PLATFORM, TOKEN
 
 
 def test_platform():
-    for p in ["render"]:
+    for p in [PLATFORM]:
         config = Configuration(p)
         assert config.platform == p
 

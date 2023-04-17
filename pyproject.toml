@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Michael R. van Rooijen <michael@vanrooijen.io>"]
 readme = "README.md"
-packages = [{include = "autoscale_agent", from = "src"}]
+packages = [{include = "autoscale_agent"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
