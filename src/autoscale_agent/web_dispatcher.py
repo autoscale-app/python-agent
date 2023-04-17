@@ -1,6 +1,8 @@
 import time
 import threading
 import os
+import json
+from . import request
 
 
 class WebDispatcher:
@@ -22,7 +24,8 @@ class WebDispatcher:
         response = request.dispatch(body, self.token)
 
         if not response.status == 200:
-            self.revert_payload(payload)
+            print(f'Autoscale[{self.id}]: Failed to dispatch data ({response.status})')
+            self.revert(payload)
 
     def add(self, value, timestamp=None):
         with self._mutex:
@@ -42,6 +45,6 @@ class WebDispatcher:
             self._buffer = {}
             return payload
 
-    def revert_payload(self, payload):
+    def revert(self, payload):
         for timestamp, value in payload.items():
             self.add(value, timestamp)

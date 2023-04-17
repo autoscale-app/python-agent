@@ -18,8 +18,8 @@ def freeze_module(freeze_session):
     pass
 
 # enable httpretty for all tests
-@pytest.hookimpl(tryfirst=True)
-def pytest_collection_modifyitems(items):
-    httpretty.enable()
-    yield
-    httpretty.disable()
+# @pytest.hookimpl(tryfirst=True)
+# def pytest_collection_modifyitems(items):
+#     httpretty.enable()
+#     yield
+#     httpretty.disable()
