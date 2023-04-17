@@ -1,0 +1,42 @@
+import pytest
+import time
+from freezegun import freeze_time
+import tests.helpers as helpers
+from tests.helpers import TOKEN
+from autoscale_agent.middleware import Middleware, RequestInfo
+from autoscale_agent.configuration import Configuration
+
+
+def build_config():
+    return Configuration("render")
+
+def call(config, path="",headers={}):
+    return Middleware(config, run=False).process_request(RequestInfo(path, headers))
+
+def test_call_default():
+    assert None == call(build_config())
+
+def test_call_serve():
+    config = build_config().serve(TOKEN, lambda: 1.23)
+    response = call(config,"/autoscale",{"HTTP_AUTOSCALE_METRIC_TOKENS": f"{TOKEN},invalid"})
+    headers = {
+        "content-type": "application/json",
+        "cache-control": "must-revalidate, private, max-age=0"
+    }
+    assert (200, headers, "1.23") == response
+
+def test_call_serve_404():
+    config = build_config().serve(TOKEN, lambda: 1.23)
+    response = call(config, "/autoscale", {"HTTP_AUTOSCALE_METRIC_TOKENS": "invalid"})
+    assert (404, {}, "Not Found") == response
+
+def test_call_record_queue_time_on_render():
+    config = build_config().dispatch(TOKEN)
+    for travel, request_start in [[0, 500_000], [0, 1_000_000], [1, 1_500_000]]:
+        with helpers.travel(travel):
+            current_time = int(time.time() * 1_000_000)
+            response = call(config, "/", {"HTTP_X_REQUEST_START": (current_time - request_start)})
+            assert None == response
+
+    buffer = config.web_dispatchers.queue_time.buffer
+    assert {946684800: 1000, 946684801: 1500} == buffer
