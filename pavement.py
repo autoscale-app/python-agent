@@ -20,4 +20,15 @@ def format():
 
 @task
 def test():
-    sh("pytest")
+    sh("coverage run -m pytest")
+
+
+@task
+def coverage_report():
+    sh("coverage report")
+
+
+@task
+def coverage_html():
+    sh("coverage html")
+    sh("open htmlcov/index.html")

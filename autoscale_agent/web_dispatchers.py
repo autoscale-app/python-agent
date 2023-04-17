@@ -22,7 +22,8 @@ class WebDispatchers:
 
     def dispatch(self):
         try:
-            self.queue_time.dispatch()
+            if self.queue_time:
+                self.queue_time.dispatch()
         except Exception as e:
             print(
                 f"Autoscale: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}"

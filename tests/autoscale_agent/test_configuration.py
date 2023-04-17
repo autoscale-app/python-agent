@@ -1,9 +1,22 @@
 import pytest
+from unittest.mock import MagicMock
 from autoscale_agent.configuration import Configuration, InvalidPlatformError
 from autoscale_agent.web_dispatcher import WebDispatcher
 from autoscale_agent.worker_dispatcher import WorkerDispatcher
 from autoscale_agent.worker_server import WorkerServer
 from tests.helpers import PLATFORM, TOKEN
+
+
+def test_run_calls():
+    config = Configuration(PLATFORM)
+    mock_web_dispatchers_run = MagicMock()
+    mock_worker_dispatchers_run = MagicMock()
+    config.web_dispatchers.run = mock_web_dispatchers_run
+    config.worker_dispatchers.run = mock_worker_dispatchers_run
+    config.run()
+    config.run()
+    mock_web_dispatchers_run.assert_called_once()
+    mock_worker_dispatchers_run.assert_called_once()
 
 
 def test_platform():
