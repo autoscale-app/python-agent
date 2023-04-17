@@ -2,7 +2,7 @@
 name = "autoscale-agent"
 version = "0.1.0"
 description = ""
-authors = ["Michael R. van Rooijen <michael@vanrooijen.io>"]
+authors = ["Michael R. van Rooijen <michael@autoscale.app>"]
 readme = "README.md"
 packages = [{include = "autoscale_agent"}]
 
