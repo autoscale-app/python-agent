@@ -3,6 +3,7 @@ import json
 from unittest.mock import patch, MagicMock
 import autoscale_agent.request as request
 
+
 @patch("http.client.HTTPSConnection")
 def test_dispatch(mock_conn):
     body = json.dumps({"metric": "worker", "value": 80})
@@ -22,12 +23,12 @@ def test_dispatch(mock_conn):
     mock_conn.return_value.request.assert_called_once_with(
         "POST",
         "/",
-        body='{"metric": "worker", "value": 80}'.encode('utf-8'),
+        body='{"metric": "worker", "value": 80}'.encode("utf-8"),
         headers={
             "User-Agent": "Autoscale Agent (Python)",
             "Content-Type": "application/json",
-            "Autoscale-Metric-Token": "1234567890"
-        }
+            "Autoscale-Metric-Token": "1234567890",
+        },
     )
 
     # Verify that the response status is 200

@@ -2,6 +2,7 @@ import threading
 import traceback
 import time
 
+
 class WorkerDispatchers:
     DISPATCH_INTERVAL = 15
 
@@ -16,7 +17,9 @@ class WorkerDispatchers:
             try:
                 dispatcher.dispatch()
             except Exception as e:
-                print(f"Autoscale: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}")
+                print(
+                    f"Autoscale: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}"
+                )
 
     def run(self):
         thread = threading.Thread(target=self.run_loop, daemon=True)

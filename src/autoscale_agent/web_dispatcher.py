@@ -25,7 +25,7 @@ class WebDispatcher:
         response = request.dispatch(body, self.token)
 
         if not response.status == http.client.OK:
-            print(f'Autoscale[{self.id}]: Failed to dispatch data ({response.status})')
+            print(f"Autoscale[{self.id}]: Failed to dispatch data ({response.status})")
             self.revert(payload)
 
     def add(self, value, timestamp=None):

@@ -7,8 +7,10 @@ from autoscale_agent.worker_server import WorkerServer
 from autoscale_agent.worker_dispatcher import WorkerDispatcher
 from autoscale_agent.web_dispatcher import WebDispatcher
 
+
 class InvalidPlatformError(Exception):
     pass
+
 
 class Configuration:
     def __init__(self, platform=None):
@@ -41,5 +43,7 @@ class Configuration:
         if value == "render":
             return value
         else:
-            raise InvalidPlatformError(f"platform {value} is unsupported, " \
-                                       "'render' is currently the only supported option")
+            raise InvalidPlatformError(
+                f"platform {value} is unsupported, "
+                "'render' is currently the only supported option"
+            )

@@ -53,9 +53,13 @@ class Middleware:
         dispatcher.add(elapsed)
 
     def request_start_header(self, request_info):
-        return int(request_info.headers.get("HTTP_X_REQUEST_START") or request_info.headers.get("HTTP_X_QUEUE_START") or 0)
+        return int(
+            request_info.headers.get("HTTP_X_REQUEST_START")
+            or request_info.headers.get("HTTP_X_QUEUE_START")
+            or 0
+        )
 
     def to_ms(self, start):
-        if self.config.platform == 'render':
+        if self.config.platform == "render":
             return int(start / 1000)
         return start

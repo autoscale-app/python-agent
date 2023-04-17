@@ -3,8 +3,10 @@ import traceback
 import time
 import sys
 
+
 class AlreadySetError(Exception):
     pass
+
 
 class WebDispatchers:
     DISPATCH_INTERVAL = 1
@@ -22,7 +24,9 @@ class WebDispatchers:
         try:
             self.queue_time.dispatch()
         except Exception as e:
-            print(f"Autoscale::Agent/WebDispatcher: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}")
+            print(
+                f"Autoscale::Agent/WebDispatcher: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}"
+            )
 
     def run(self):
         threading.Thread(target=self.run_loop, daemon=True).start()

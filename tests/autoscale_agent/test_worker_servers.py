@@ -9,6 +9,7 @@ def test_find():
     servers.append(server)
     assert servers.find(["token-a", TOKEN, "token-b"]) == server
 
+
 def test_find_nothing():
     servers = WorkerServers()
     server = WorkerServer(TOKEN, lambda: 1.23)

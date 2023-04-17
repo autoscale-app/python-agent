@@ -11,18 +11,22 @@ def test_platform():
         config = Configuration(p)
         assert config.platform == p
 
+
 def test_platform_invalid():
     with pytest.raises(InvalidPlatformError):
         Configuration("whoami")
+
 
 def test_dispatch_web():
     config = Configuration(PLATFORM).dispatch(TOKEN)
     assert isinstance(config.web_dispatchers.queue_time, WebDispatcher)
 
+
 def test_dispatch_worker():
     config = Configuration(PLATFORM).dispatch(TOKEN, lambda: 1.23)
     assert isinstance(config.worker_dispatchers._dispatchers[0], WorkerDispatcher)
     assert len(config.worker_dispatchers._dispatchers) == 1
+
 
 def test_serve_worker():
     config = Configuration(PLATFORM).serve(TOKEN, lambda: 1.23)

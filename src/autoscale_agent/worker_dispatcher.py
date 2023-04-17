@@ -3,6 +3,7 @@ import time
 import http.client
 import autoscale_agent.request as request
 
+
 class WorkerDispatcher:
     def __init__(self, token, callable):
         self.token = token
@@ -20,7 +21,9 @@ class WorkerDispatcher:
         response = request.dispatch(body=body, token=self.token)
 
         if not response.status == http.client.OK:
-            self.error(f"Failed to dispatch ({response.status}) {response.read().decode()}")
+            self.error(
+                f"Failed to dispatch ({response.status}) {response.read().decode()}"
+            )
 
     def error(self, msg):
         print(f"Autoscale[{self.id}][ERROR]: {msg}")
