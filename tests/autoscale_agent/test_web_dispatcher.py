@@ -7,6 +7,10 @@ from tests.helpers import travel, TOKEN
 from autoscale_agent.web_dispatcher import WebDispatcher
 
 
+def test_token():
+    dispatcher = WebDispatcher(TOKEN)
+    assert "u4quBFgM72qun74EwashWv6Ll5TzhBVktVmicoWoXla" == dispatcher.token
+
 def test_id():
     dispatcher = WebDispatcher(TOKEN)
     assert "u4quBFg" == dispatcher.id
