@@ -17,6 +17,20 @@ def test_id():
     assert "u4quBFg" == dispatcher.id
 
 
+def test_add():
+    with freeze_time("2000-01-01 00:00:00"):
+        dispatcher = WebDispatcher(TOKEN)
+        dispatcher.add(1)
+        assert dispatcher._buffer == {946684800: 1}
+
+
+def test_add_ttl_exceeded():
+    with freeze_time("2000-01-01 00:00:00"):
+        dispatcher = WebDispatcher(TOKEN)
+        dispatcher.add(1, 946684800 - WebDispatcher.TTL)
+        assert dispatcher._buffer == {}
+
+
 @httpretty.activate(verbose=True, allow_net_connect=False)
 def test_dispatch():
     httpretty.register_uri(
