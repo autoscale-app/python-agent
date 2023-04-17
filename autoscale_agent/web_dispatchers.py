@@ -9,7 +9,7 @@ class AlreadySetError(Exception):
 
 
 class WebDispatchers:
-    DISPATCH_INTERVAL = 1
+    DISPATCH_INTERVAL = 15
 
     def __init__(self):
         self.queue_time = None
@@ -25,7 +25,7 @@ class WebDispatchers:
             self.queue_time.dispatch()
         except Exception as e:
             print(
-                f"Autoscale::Agent/WebDispatcher: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}"
+                f"Autoscale: {type(e).__name__}\n{traceback.print_tb(e.__traceback__)}"
             )
 
     def run(self):

@@ -26,4 +26,4 @@ def test_dispatch_exception(mocker, capsys):
     mocker.patch.object(dispatchers.queue_time, "dispatch", side_effect=RuntimeError)
     dispatchers.dispatch()
     out, _ = capsys.readouterr()
-    assert "Autoscale::Agent/WebDispatcher: RuntimeError" in out
+    assert "Autoscale: RuntimeError" in out

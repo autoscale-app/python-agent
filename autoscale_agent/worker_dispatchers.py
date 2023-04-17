@@ -22,10 +22,9 @@ class WorkerDispatchers:
                 )
 
     def run(self):
-        thread = threading.Thread(target=self.run_loop, daemon=True)
-        thread.start()
+        threading.Thread(target=self.run_loop, daemon=True).start()
 
-    def run_loop():
+    def run_loop(self):
         while True:
             self.dispatch()
             time.sleep(self.DISPATCH_INTERVAL)
