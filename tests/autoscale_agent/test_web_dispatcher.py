@@ -2,7 +2,6 @@ import json
 from unittest.mock import patch
 
 import httpretty
-import pytest
 from freezegun import freeze_time
 
 from autoscale_agent.web_dispatcher import WebDispatcher

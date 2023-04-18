@@ -1,6 +1,5 @@
 import http.client
 import json
-import os
 import sys
 import threading
 import time

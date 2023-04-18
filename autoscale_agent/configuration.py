@@ -1,6 +1,3 @@
-import os
-import threading
-
 from autoscale_agent.web_dispatcher import WebDispatcher
 from autoscale_agent.worker_dispatcher import WorkerDispatcher
 from autoscale_agent.worker_dispatchers import WorkerDispatchers

@@ -1,5 +1,4 @@
 import json
-import os
 
 from django.http import HttpResponseNotFound, JsonResponse
 

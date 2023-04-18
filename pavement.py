@@ -10,12 +10,14 @@ def default():
 
 @task
 def check():
-    sh("isort --check . && black --check .")
+    sh(
+        "autoflake --remove-all-unused-imports -r --check . && isort --check . && black --check ."
+    )
 
 
 @task
 def format():
-    sh("isort . && black .")
+    sh("autoflake --remove-all-unused-imports -ri . && isort . && black .")
 
 
 @task

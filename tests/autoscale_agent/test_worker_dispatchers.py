@@ -1,7 +1,5 @@
 from unittest.mock import patch
 
-import pytest
-
 from autoscale_agent.worker_dispatcher import WorkerDispatcher
 from autoscale_agent.worker_dispatchers import WorkerDispatchers
 from tests.helpers import TOKEN

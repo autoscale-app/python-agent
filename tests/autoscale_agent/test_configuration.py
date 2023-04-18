@@ -1,5 +1,3 @@
-from unittest.mock import MagicMock
-
 import pytest
 
 from autoscale_agent.configuration import Configuration, InvalidPlatformError
