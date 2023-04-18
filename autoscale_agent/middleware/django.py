@@ -1,8 +1,11 @@
-import os
 import json
-from django.http import JsonResponse, HttpResponseNotFound
+import os
+
+from django.http import HttpResponseNotFound, JsonResponse
+
 from autoscale_agent.agent import Agent
-from autoscale_agent.middleware import Middleware as BaseMiddleware, RequestInfo
+from autoscale_agent.middleware import Middleware as BaseMiddleware
+from autoscale_agent.middleware import RequestInfo
 
 
 class Middleware:

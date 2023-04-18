@@ -1,6 +1,7 @@
+import http.client
 import json
 import time
-import http.client
+
 from autoscale_agent.util import dispatch
 
 

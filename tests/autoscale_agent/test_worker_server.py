@@ -1,4 +1,5 @@
 import json
+
 from autoscale_agent.worker_server import WorkerServer
 from tests.helpers import TOKEN
 

@@ -1,10 +1,12 @@
-import pytest
 import json
-import httpretty
 from unittest.mock import patch
+
+import httpretty
+import pytest
 from freezegun import freeze_time
-from tests.helpers import TOKEN
+
 from autoscale_agent.web_dispatcher import WebDispatcher
+from tests.helpers import TOKEN
 
 
 def test_token():

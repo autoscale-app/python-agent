@@ -1,10 +1,11 @@
 import os
 import threading
-from autoscale_agent.worker_dispatchers import WorkerDispatchers
-from autoscale_agent.worker_servers import WorkerServers
-from autoscale_agent.worker_server import WorkerServer
-from autoscale_agent.worker_dispatcher import WorkerDispatcher
+
 from autoscale_agent.web_dispatcher import WebDispatcher
+from autoscale_agent.worker_dispatcher import WorkerDispatcher
+from autoscale_agent.worker_dispatchers import WorkerDispatchers
+from autoscale_agent.worker_server import WorkerServer
+from autoscale_agent.worker_servers import WorkerServers
 
 
 class InvalidPlatformError(Exception):

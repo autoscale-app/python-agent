@@ -1,10 +1,11 @@
-import time
-import threading
-import traceback
+import http.client
+import json
 import os
 import sys
-import json
-import http.client
+import threading
+import time
+import traceback
+
 from autoscale_agent.util import dispatch
 
 

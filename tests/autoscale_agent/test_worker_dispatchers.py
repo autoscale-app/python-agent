@@ -1,7 +1,9 @@
-import pytest
 from unittest.mock import patch
-from autoscale_agent.worker_dispatchers import WorkerDispatchers
+
+import pytest
+
 from autoscale_agent.worker_dispatcher import WorkerDispatcher
+from autoscale_agent.worker_dispatchers import WorkerDispatchers
 from tests.helpers import TOKEN
 
 

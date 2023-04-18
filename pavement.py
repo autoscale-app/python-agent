@@ -1,5 +1,5 @@
-from paver.tasks import task, needs
 from paver.easy import sh
+from paver.tasks import needs, task
 
 
 @task
@@ -10,12 +10,12 @@ def default():
 
 @task
 def check():
-    sh("black --check .")
+    sh("isort --check . && black --check .")
 
 
 @task
 def format():
-    sh("black .")
+    sh("isort . && black .")
 
 
 @task

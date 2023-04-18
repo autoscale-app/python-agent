@@ -1,5 +1,7 @@
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
+
 from autoscale_agent.configuration import Configuration, InvalidPlatformError
 from autoscale_agent.web_dispatcher import WebDispatcher
 from autoscale_agent.worker_dispatcher import WorkerDispatcher

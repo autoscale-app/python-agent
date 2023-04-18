@@ -1,6 +1,8 @@
 import json
 import time
+
 import httpretty
+
 from autoscale_agent.worker_dispatcher import WorkerDispatcher
 from tests.helpers import TOKEN
 

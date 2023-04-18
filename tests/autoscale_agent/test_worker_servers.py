@@ -1,5 +1,5 @@
-from autoscale_agent.worker_servers import WorkerServers
 from autoscale_agent.worker_server import WorkerServer
+from autoscale_agent.worker_servers import WorkerServers
 from tests.helpers import TOKEN
 
 

@@ -1,9 +1,11 @@
-import pytest
 import time
+
+import pytest
 from freezegun import freeze_time
-from tests.helpers import TOKEN
-from autoscale_agent.middleware import Middleware, RequestInfo, NotConfigured
+
 from autoscale_agent.configuration import Configuration
+from autoscale_agent.middleware import Middleware, NotConfigured, RequestInfo
+from tests.helpers import TOKEN
 
 
 def build_config():
