@@ -1,7 +1,15 @@
+import json
+
+
 class WorkerServer:
-    def __init__(self, token, callable):
+    def __init__(self, token, measure):
         self.token = token
-        self._callable = callable
+        self._measure = measure
 
     def serve(self):
-        return self._callable()
+        value = self._measure()
+
+        if value is None:
+            return json.dumps(value)
+        else:
+            return json.dumps(str(value))

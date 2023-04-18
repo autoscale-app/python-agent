@@ -9,4 +9,5 @@ class WorkerServers:
         for server in self._servers:
             if server.token in tokens:
                 return server
+
         return None

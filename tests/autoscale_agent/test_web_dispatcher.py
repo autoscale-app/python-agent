@@ -108,5 +108,12 @@ def test_dispatch_500(capsys):
     }
     assert actual_body == expected_body
     out, _ = capsys.readouterr()
-    assert "Autoscale[u4quBFg]: Failed to dispatch data (500)" in out
+    assert "Autoscale[u4quBFg][ERROR]: Failed to dispatch data (500)" in out
     assert buffer == dispatcher._buffer
+
+
+@patch("threading.Thread")
+def test_run(mock_thread):
+    dispatcher = WebDispatcher(TOKEN)
+    dispatcher.run()
+    mock_thread.assert_called_once_with(target=dispatcher._run_loop, daemon=True)

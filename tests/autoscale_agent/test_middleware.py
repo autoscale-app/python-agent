@@ -2,7 +2,7 @@ import pytest
 import time
 from freezegun import freeze_time
 from tests.helpers import TOKEN
-from autoscale_agent.middleware import Middleware, RequestInfo
+from autoscale_agent.middleware import Middleware, RequestInfo, NotConfigured
 from autoscale_agent.configuration import Configuration
 
 
@@ -18,6 +18,11 @@ def test_call_default():
     assert None == call(build_config())
 
 
+def test_not_configured():
+    with pytest.raises(NotConfigured):
+        call(None)
+
+
 def test_call_serve():
     config = build_config().serve(TOKEN, lambda: 1.23)
     response = call(
@@ -27,7 +32,7 @@ def test_call_serve():
         "content-type": "application/json",
         "cache-control": "must-revalidate, private, max-age=0",
     }
-    assert (200, headers, "1.23") == response
+    assert (200, headers, '"1.23"') == response
 
 
 def test_call_serve_404():
@@ -46,5 +51,12 @@ def test_call_record_queue_time_on_render():
             )
             assert None == response
 
-    buffer = config.web_dispatchers.queue_time._buffer
+    buffer = config.web_dispatcher._buffer
     assert {946684800: 1000, 946684801: 1500} == buffer
+
+
+def test_call_record_queue_time_missing_headers():
+    config = build_config().dispatch(TOKEN)
+    response = call(config, "/", {})
+    assert None == response
+    assert {} == config.web_dispatcher._buffer

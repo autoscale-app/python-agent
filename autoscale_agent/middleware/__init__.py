@@ -1,5 +1,8 @@
-import json
 import time
+
+
+class NotConfigured(Exception):
+    pass
 
 
 class RequestInfo:
@@ -9,14 +12,11 @@ class RequestInfo:
 
 
 class Middleware:
-    def __init__(self, config, run=False):
+    def __init__(self, config):
         if not config:
-            raise Exception("Autoscale agent not configured.")
+            raise NotConfigured("No Autoscale configuration provided.")
 
         self.config = config
-
-        if run:
-            config.run()
 
     def process_request(self, request_info):
         if request_info.path == "/autoscale":
@@ -33,24 +33,27 @@ class Middleware:
             "content-type": "application/json",
             "cache-control": "must-revalidate, private, max-age=0",
         }
-        body = json.dumps(server.serve())
+        body = server.serve()
 
         return 200, headers, body
 
     def record_queue_time(self, request_info):
-        request_start_header = self.request_start_header(request_info)
-        if not request_start_header:
+        web_dispatcher = self.config.web_dispatcher
+
+        if not web_dispatcher:
             return
 
-        dispatcher = self.config.web_dispatchers.queue_time
-        if not dispatcher:
+        request_start_header = self.request_start_header(request_info)
+
+        if not request_start_header:
             return
 
         current_time = int(time.time() * 1000)
         request_start_time = self.to_ms(request_start_header)
         elapsed_ms = current_time - request_start_time
         elapsed = max(0, elapsed_ms)
-        dispatcher.add(elapsed)
+        web_dispatcher.add(elapsed)
+        web_dispatcher.run()
 
     def request_start_header(self, request_info):
         return int(

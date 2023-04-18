@@ -1,6 +1,5 @@
 import os
 import threading
-from autoscale_agent.web_dispatchers import WebDispatchers
 from autoscale_agent.worker_dispatchers import WorkerDispatchers
 from autoscale_agent.worker_servers import WorkerServers
 from autoscale_agent.worker_server import WorkerServer
@@ -15,29 +14,22 @@ class InvalidPlatformError(Exception):
 class Configuration:
     def __init__(self, platform=None):
         self.platform = self._validate_platform(platform)
-        self.web_dispatchers = WebDispatchers()
+        self.web_dispatcher = None
         self.worker_dispatchers = WorkerDispatchers()
         self.worker_servers = WorkerServers()
-        self._running = False
-        self._running_lock = threading.Lock()
 
     def dispatch(self, token, block=None):
         if block:
             self.worker_dispatchers.append(WorkerDispatcher(token, block))
         else:
-            self.web_dispatchers.set_queue_time(WebDispatcher(token))
+            self.web_dispatcher = WebDispatcher(token)
+
         return self
 
     def serve(self, token, block):
         self.worker_servers.append(WorkerServer(token, block))
-        return self
 
-    def run(self):
-        with self._running_lock:
-            if not self._running:
-                self._running = True
-                self.web_dispatchers.run()
-                self.worker_dispatchers.run()
+        return self
 
     def _validate_platform(self, value):
         if value == "render":

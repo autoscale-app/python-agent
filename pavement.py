@@ -20,7 +20,7 @@ def format():
 
 @task
 def test():
-    sh("coverage run -m pytest")
+    sh("coverage run -m pytest -vv")
 
 
 @task

@@ -1,4 +1,6 @@
-from flask import Response, request as flask_request
+import os
+import json
+from flask import request, Response
 from autoscale_agent.agent import Agent
 from autoscale_agent.middleware import Middleware as BaseMiddleware, RequestInfo
 
@@ -6,19 +8,28 @@ from autoscale_agent.middleware import Middleware as BaseMiddleware, RequestInfo
 class Middleware:
     def __init__(self, app):
         self.app = app
+        self.original_wsgi_app = app.wsgi_app
 
     def __call__(self, environ, start_response):
         with self.app.request_context(environ):
-            request = flask_request
             middleware = BaseMiddleware(Agent.configuration)
-            request_info = RequestInfo(request.path, request.headers)
+            request_info = RequestInfo(request.path, request.environ)
             response = middleware.process_request(request_info)
 
             if isinstance(response, tuple):
                 status, headers, body = response
-                response = Response(body, status, headers)
+
+                if status == 200:
+                    response = Response(
+                        json.loads(body), content_type="application/json"
+                    )
+                else:
+                    response = Response(body, status=404)
+
+                for key, value in headers.items():
+                    response.headers[key] = value
 
             if response:
                 return response(environ, start_response)
 
-        return self.app(environ, start_response)
+        return self.original_wsgi_app(environ, start_response)

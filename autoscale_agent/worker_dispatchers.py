@@ -8,6 +8,8 @@ class WorkerDispatchers:
 
     def __init__(self):
         self._dispatchers = []
+        self._running = False
+        self._running_lock = threading.Lock()
 
     def append(self, dispatcher):
         self._dispatchers.append(dispatcher)
@@ -22,9 +24,15 @@ class WorkerDispatchers:
                 )
 
     def run(self):
-        threading.Thread(target=self.run_loop, daemon=True).start()
+        with self._running_lock:
+            if not self._dispatchers:
+                return
 
-    def run_loop(self):
+            if not self._running:
+                self._running = True
+                threading.Thread(target=self._run_loop, daemon=True).start()
+
+    def _run_loop(self):
         while True:
             self.dispatch()
             time.sleep(self.DISPATCH_INTERVAL)

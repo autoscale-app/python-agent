@@ -10,7 +10,7 @@ class Middleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        middleware = BaseMiddleware(Agent.configuration, run=True)
+        middleware = BaseMiddleware(Agent.configuration)
         request_info = RequestInfo(request.path, request.META)
         response = middleware.process_request(request_info)
 
@@ -21,6 +21,7 @@ class Middleware:
                 response = JsonResponse(json.loads(body), safe=False)
             else:
                 response = HttpResponseNotFound(body)
+
             for key, value in headers.items():
                 response[key] = value
 

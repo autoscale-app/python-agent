@@ -63,7 +63,4 @@ def test_dispatch_nil_value(capsys):
     out, _ = capsys.readouterr()
     dispatcher.dispatch()
     out, _ = capsys.readouterr()
-    assert (
-        "Autoscale[u4quBFg][ERROR]: Failed to calculate worker information (None)"
-        in out
-    )
+    assert "Autoscale[u4quBFg][ERROR]: No value to dispatch (None)" in out
