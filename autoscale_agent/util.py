@@ -1,5 +1,6 @@
 import http.client
 import os
+import time
 
 
 def debug(*args, **kwargs):
@@ -19,3 +20,13 @@ def dispatch(body, token):
     response = conn.getresponse()
     conn.close()
     return response
+
+
+def loop_with_interval(interval, calleable):
+    while True:
+        start = time.time()
+        calleable()
+        end = time.time()
+        elapsed = end - start
+        if elapsed < interval:
+            time.sleep(interval - elapsed)

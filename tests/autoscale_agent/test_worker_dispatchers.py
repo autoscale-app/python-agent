@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from autoscale_agent.worker_dispatcher import WorkerDispatcher
 from autoscale_agent.worker_dispatchers import WorkerDispatchers
 from tests.helpers import TOKEN
@@ -25,9 +23,27 @@ def test_dispatch_exception(mocker, capsys):
     assert "Autoscale: RuntimeError" in out
 
 
-@patch("threading.Thread")
-def test_run(mock_thread):
+def test_append():
     dispatchers = WorkerDispatchers()
-    dispatchers.append(WorkerDispatcher(TOKEN, lambda: 1.23))
-    dispatchers.run()
-    mock_thread.assert_called_once_with(target=dispatchers._run_loop, daemon=True)
+    dispatcher = WorkerDispatcher(TOKEN, lambda: None)
+
+    assert len(dispatchers._dispatchers) == 0
+    dispatchers.append(dispatcher)
+    assert len(dispatchers._dispatchers) == 1
+    assert dispatchers._dispatchers[0] == dispatcher
+
+
+def test_dispatch_multiple_dispatchers(mocker):
+    dispatchers = WorkerDispatchers()
+    dispatcher1 = WorkerDispatcher(TOKEN, lambda: None)
+    dispatcher2 = WorkerDispatcher(TOKEN, lambda: None)
+    dispatchers.append(dispatcher1)
+    dispatchers.append(dispatcher2)
+
+    mocker.patch.object(dispatcher1, "dispatch")
+    mocker.patch.object(dispatcher2, "dispatch")
+
+    dispatchers.dispatch()
+
+    assert dispatcher1.dispatch.called
+    assert dispatcher2.dispatch.called

@@ -34,7 +34,6 @@ Prepare environment:
     pip install poetry
     poetry install
 
-
 Boot the shell:
 
     poetry shell
