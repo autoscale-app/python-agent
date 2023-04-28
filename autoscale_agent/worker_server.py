@@ -8,8 +8,4 @@ class WorkerServer:
 
     def serve(self):
         value = self._measure()
-
-        if value is None:
-            return json.dumps(value)
-        else:
-            return json.dumps(str(value))
+        return bytes(json.dumps(value), "utf-8")

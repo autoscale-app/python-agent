@@ -34,7 +34,7 @@ def test_call_serve():
         "content-type": "application/json",
         "cache-control": "must-revalidate, private, max-age=0",
     }
-    assert (200, headers, '"1.23"') == response
+    assert (200, headers, b"1.23") == response
 
 
 def test_call_serve_404():
