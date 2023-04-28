@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "autoscale-agent"
-version = "0.2.0"
+version = "0.2.1"
 description = "Provides Autoscale.app with the necessary metrics for autoscaling web and worker processes"
 authors = ["Michael R. van Rooijen <support@autoscale.app>"]
 license = "MIT"
